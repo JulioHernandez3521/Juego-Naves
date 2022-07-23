@@ -1,0 +1,104 @@
+class Naves{
+  PImage  nav;
+  PVector location;
+  PVector velocidad;
+  PVector aceleracion;
+//////////////////////////////
+  PVector velocidadA;
+  PVector aceleracionA;
+  PVector pAtaque;
+  
+  Naves(float posx,float posy){  
+    location = new PVector(posx,posy);
+    velocidad = new PVector(0,0);
+    aceleracion = new PVector(.3,0);
+    //-----------------------------------------
+    pAtaque = new PVector(0,-150);
+    velocidadA = new PVector(0,0);
+    aceleracionA = new PVector(0,20);
+  }
+
+
+ 
+  
+  void cargaima(){
+    nav= loadImage("navA.png");
+    nav.resize(50,50);
+  }
+ 
+ 
+  void limite(){
+    if(location.x>width/2){
+      velocidadA.x =0;
+      aceleracion.x= -.8;
+    }
+    if(location.x< width/2){
+      velocidadA.x =0;
+      aceleracion.x=.8;
+    }
+  }
+
+  
+  void update(){
+    velocidad.add(aceleracion);
+    location.add(velocidad);
+  }
+
+  
+  void Dibujanave(){
+      cargaima();
+      image(nav,location.x,location.y+60);
+      limite();
+      update();
+      
+  }
+  void Naves[][] matarNave(Nave misNaves[][], int fila, int columna){
+      
+      Naves [][] resultado = new Naves[misNaves[fila].length][misNaves[columna].length];
+      
+      for(int i=0;i<misNaves.length;i++){
+          for(int j=0;j<misNaves[i].length;j++){
+              if(misNaves[i][j]!=misNaves[fila][columna]){
+                resultado[i][j] = misNaves[i][j];
+              }
+          }
+      }
+
+      return resultado;
+  }
+  
+
+  void ataque(){
+    fill(255,213,2);
+    velocidadA.add(aceleracionA);
+    pAtaque.add(velocidadA);
+    ellipse(pAtaque.x,pAtaque.y,10,10);
+    if(pAtaque.y>height+10){
+      pAtaque.y = -15;
+      velocidadA.y=0;
+    }
+  }
+
+
+ void mouseClicked(){
+      pAtaque.x = location.x+10;
+      pAtaque.y = location.y;
+      ataque();
+  }
+
+
+  void Ataque(){
+    if(mousePressed){
+      mouseClicked();
+    }
+  }
+
+  
+ void display(){
+    Dibujanave();
+   
+  }
+  
+  
+
+}
